@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "user": {
+    "id": "817e81a6-0f9c-4fdd-8242-daf3490bd0e5",
+    "username": "uiuser",
+    "display_name": "小鱼",
+    "created_at": "2026-10-03T15:02:12.177243+00:00"
+  },
+  "episodes": [
+    {
+      "chief_complaint": "胸痛并伴有呼吸困难，爬楼后加重",
+      "symptoms": [
+        "胸痛",
+        "呼吸困难"
+      ],
+      "severity": 5,
+      "started_at": "2026-10-03",
+      "ended_at": null,
+      "status": "ongoing",
+      "outcome": "improving",
+      "vitals": {
+        "temperature": 38.5,
+        "heart_rate": null,
+        "spo2": 92
+      },
+      "medications": [],
+      "notes": "",
+      "id": "fdb1e711-c4ad-457f-8ab9-79db017ac68d",
+      "version": 2,
+      "created_at": "2026-10-03T15:02:25.655799+00:00",
+      "updated_at": "2026-10-03T15:02:35.226444+00:00",
+      "analysis": {
+        "level": "emergency",
+        "label": "请确认并及时处理危险信号",
+        "summary": "如这些危险症状正在发生，请立即就医或拨打当地急救电话（中国大陆 120），不要等待系统分析。",
+        "reasons": [
+          "症状记录包含需警惕的信号：呼吸困难、胸痛。",
+          "记录的血氧为 92%。请立即核实测量；若仍低或伴不适，请立即寻求急诊评估。参考阈值源自 COVID-19 成人居家监测，并不适用于所有人；已有个人目标值者应联系治疗团队。",
+          "你将症状影响程度记录为较重，建议及时联系医生评估。",
+          "记录体温 38.5℃；单次读数不能说明发热持续时间。若持续不改善或加重，应及时就医。",
+          "暂无可对照的相近已结束病程，继续记录有助于就医时说明变化。"
+        ],
+        "matched_count": 0,
+        "disclaimer": "仅用于健康记录与信息整理，不能诊断疾病、判断用药效果或排除急症。症状相似不代表病因相同；儿童、孕产妇及有基础病者需专业评估。",
+        "rule_version": "record-safety-1.0",
+        "sources": [
+          {
+            "title": "NHS：呼吸困难与紧急求助信号",
+            "url": "https://www.nhs.uk/symptoms/shortness-of-breath/"
+          },
+          {
+            "title": "NHS：胸痛等紧急求助信号",
+            "url": "https://www.nhs.uk/conditions/heart-attack/"
+          },
+          {
+            "title": "NHS England：COVID-19 居家血氧监测（适用范围有限）",
+            "url": "https://www.england.nhs.uk/coronavirus/documents/covid-19-standard-operating-procedure-covid-oximetry-home/"
+          },
+          {
+            "title": "NHS：成人发热",
+            "url": "https://www.nhs.uk/symptoms/fever-in-adults/"
+          }
+        ]
+      }
+    }
+  ],
+  "exported_at": "2026-10-03T15:02:45.714963+00:00"
+}

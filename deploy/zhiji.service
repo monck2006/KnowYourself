@@ -1,0 +1,24 @@
+# 知己 FastAPI 服务（systemd 单元）
+# 放置到 /etc/systemd/system/zhiji.service，然后：
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now zhiji
+# 记得把下面的 your-domain.cn 换成你自己的域名。
+
+[Unit]
+Description=Zhiji health assistant API (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=zhiji
+Group=zhiji
+WorkingDirectory=/opt/zhiji/backend
+Environment=ZHIJI_DATABASE_PATH=/opt/zhiji/backend/data/zhiji.sqlite3
+Environment=ZHIJI_COOKIE_SECURE=true
+Environment=ZHIJI_ALLOWED_ORIGINS=https://your-domain.cn,capacitor://localhost
+ExecStart=/opt/zhiji/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8788 --workers 1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
