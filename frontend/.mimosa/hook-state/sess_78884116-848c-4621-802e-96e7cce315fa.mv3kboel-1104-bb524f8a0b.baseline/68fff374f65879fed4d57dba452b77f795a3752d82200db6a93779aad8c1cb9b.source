@@ -1,0 +1,54 @@
+import{d as M,o as l,c as p,b as t,h as o,u as f,G as k,m as z,_,e as b,j as g,f as T,v as V,F as C,g as q,B,s as H,q as j,a as h,Q as E,t as P}from"./index-CBN7rfyE.js";function D(d,n){const i=new Map;for(const a of d){const s=new Set(n(a).map(u=>u.trim()).filter(Boolean));for(const u of s)i.set(u,(i.get(u)??0)+1)}return Array.from(i,([a,s])=>({name:a,count:s})).sort((a,s)=>s.count-a.count||a.name.localeCompare(s.name,"zh-CN"))}function R(d){const n=[...d].sort((i,a)=>i.started_at.localeCompare(a.started_at)||i.created_at.localeCompare(a.created_at)||i.id.localeCompare(a.id));return{records:n,count:n.length,ongoingCount:n.filter(i=>i.status==="ongoing").length,endedCount:n.filter(i=>i.status==="ended").length,firstDate:n[0]?.started_at??null,lastDate:n.at(-1)?.started_at??null,symptoms:D(n,i=>i.symptoms),medications:D(n,i=>i.medications.map(a=>a.name))}}function A(d){return d.replace(/[&<>"']/g,n=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[n])}function U(d,n,i){return`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><title>${A(i)} · 就诊摘要</title><style>${n}</style></head><body>${d}</body></html>`}const O=`.report-toolbar { display: grid; gap: 14px; margin-bottom: 24px; color: #536459; font-size: 14px; }
+.report-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+.report-questions-input { margin: 0; }
+.report-modal { width: min(960px, 100%); max-width: 960px; }
+.visit-report { background: #fff; color: #23342b; padding: 28px; border: 1px solid #dde5dc; border-radius: 12px; font: 14px/1.7 -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; overflow-wrap: anywhere; }
+.visit-report * { box-sizing: border-box; }
+.visit-report h1, .visit-report h2, .visit-report h3, .visit-report h4, .visit-report p, .visit-report dl { margin: 0; }
+.visit-report h1 { font-size: 24px; line-height: 1.4; margin: 8px 0 14px; }
+.visit-report h2 { font-size: 18px; margin-bottom: 10px; }
+.visit-report h3 { font-size: 15px; margin-bottom: 8px; }
+.visit-report h4 { font-size: 14px; margin-bottom: 6px; }
+.visit-report-header { border-bottom: 2px solid #4a7c5f; padding-bottom: 18px; }
+.visit-report-brand { color: #4a7c5f; letter-spacing: 1px; font-size: 12px; }
+.visit-report-header > p:last-child { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.visit-report-notice { background: #f3f6f0; padding: 12px 14px; margin: 18px 0 !important; font-size: 12px; }
+.visit-report-summary, .visit-report-questions { padding: 8px 0 20px; }
+.visit-report-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 14px 0; }
+.visit-report-muted { color: #657169; font-size: 12px; margin-top: 12px !important; }
+.visit-report-questions p, .visit-report-notes p { white-space: pre-wrap; }
+.visit-report-episode { border-top: 1px solid #dce3da; padding: 18px 0; }
+.visit-report-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+.visit-report-facts dt { color: #657169; font-size: 12px; }
+.visit-report-facts dd { margin: 0; }
+.visit-report-measurements, .visit-report-medications, .visit-report-notes { margin-top: 14px !important; }
+.visit-report table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
+.visit-report th, .visit-report td { border: 1px solid #dce3da; padding: 8px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.visit-report th { background: #f3f6f0; font-weight: 600; }
+.visit-report-footer { border-top: 1px solid #dce3da; padding-top: 14px; color: #657169; font-size: 12px; }
+@media (max-width: 600px) {
+  .visit-report { padding: 18px 14px; }
+  .visit-report h1 { font-size: 21px; }
+  .visit-report-overview, .visit-report-facts { grid-template-columns: 1fr; }
+}
+@media print {
+  @page { size: A4; margin: 15mm; }
+  body:has(.visit-report) { background: #fff !important; overflow: visible !important; height: auto !important; }
+  body:has(.visit-report) .app-shell,
+  body:has(.visit-report) .toast-message,
+  body:has(.visit-report) .modal-header,
+  body:has(.visit-report) .report-toolbar { display: none !important; }
+  body:has(.visit-report) .modal-backdrop { position: static !important; display: block !important; padding: 0 !important; background: #fff !important; backdrop-filter: none !important; }
+  body:has(.visit-report) .modal,
+  body:has(.visit-report) .modal-content { display: block !important; width: 100% !important; max-width: none !important; max-height: none !important; height: auto !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; animation: none !important; }
+  .visit-report { padding: 0; border: 0; border-radius: 0; font-size: 10pt; color: #000; }
+  .visit-report h1 { font-size: 18pt; }
+  .visit-report h2 { font-size: 13pt; }
+  .visit-report h3, .visit-report h4 { break-after: avoid; }
+  .visit-report-header, .visit-report-facts, .visit-report-overview { break-inside: avoid; }
+  .visit-report-facts, .visit-report-overview { grid-template-columns: 1fr 1fr; }
+  .visit-report thead { display: table-header-group; }
+  .visit-report tr { break-inside: avoid; }
+  .visit-report p { orphans: 3; widows: 3; }
+}
+`,Y={class:"report-preview"},G={class:"report-toolbar"},I={class:"report-buttons"},K=["disabled"],Q=["disabled"],W={class:"field report-questions-input"},J=["disabled"],X={key:0,class:"small-note"},Z={key:1,class:"small-note"},tt={key:2,class:"notice error",role:"alert"},et={class:"visit-report-header"},ot={class:"visit-report-summary"},rt={key:0},it={class:"visit-report-overview"},st={key:0,class:"visit-report-questions"},nt={class:"visit-report-records"},at={class:"visit-report-facts"},lt={class:"visit-report-measurements"},pt={class:"visit-report-medications"},dt={key:0},ut={key:1},mt={key:0,class:"visit-report-notes"},vt={class:"visit-report-muted"},ft=M({__name:"VisitReport",props:{episodes:{},user:{},scope:{}},emits:["busy","notify"],setup(d,{emit:n}){const i=d,a=n,s=j(()=>R(i.episodes)),u=h(""),y=h(),v=h(!1),c=h(""),N=new Date().toLocaleString("zh-CN");function x(m,e){return m==null?"未填写":`${m} ${e}`}function S(){c.value="";try{window.print()}catch{c.value="当前环境无法打开打印，请下载 HTML 后使用浏览器打开。"}}async function $(){if(!(v.value||!y.value)){v.value=!0,a("busy",!0),c.value="";try{const m=U(y.value.outerHTML,O,i.user.display_name);await E(`知己就诊摘要-${P()}.html`,m,"text/html"),a("notify",k?"摘要已交给系统分享面板":"就诊摘要已下载，可离线打开和打印")}catch(m){c.value=m instanceof Error?m.message:"导出失败，请重试。"}finally{v.value=!1,a("busy",!1)}}}return(m,e)=>(l(),p("div",Y,[t("div",G,[t("p",null,"摘要包含 "+o(s.value.count)+" 条记录。报告包含健康信息，请妥善保存。",1),t("div",I,[f(k)?g("",!0):(l(),p("button",{key:0,class:"button primary small",disabled:v.value,onClick:S},[z(_,{name:"print",size:17}),e[1]||(e[1]=b("打印 / 保存 PDF",-1))],8,K)),t("button",{class:"button secondary small",disabled:v.value,onClick:$},[z(_,{name:"download",size:17}),b(o(v.value?"正在导出…":"下载 HTML"),1)],8,Q)]),t("label",W,[e[2]||(e[2]=b("就诊时想问的问题（选填）",-1)),T(t("textarea",{"onUpdate:modelValue":e[0]||(e[0]=r=>u.value=r),rows:"2",maxlength:"2000",disabled:v.value,placeholder:"例如：希望向医生补充或确认的事情。只加入本次摘要，不写入健康记录。"},null,8,J),[[V,u.value]])]),f(k)?(l(),p("p",Z,"下载后可在系统浏览器中打开 HTML，再使用系统打印功能。")):(l(),p("p",X,"点击打印后，可在浏览器打印窗口中选择“另存为 PDF”。")),c.value?(l(),p("p",tt,o(c.value),1)):g("",!0)]),t("article",{ref_key:"reportElement",ref:y,class:"visit-report","aria-label":"就诊摘要正文"},[t("header",et,[e[3]||(e[3]=t("p",{class:"visit-report-brand"},"知己 · KNOW YOURSELF",-1)),e[4]||(e[4]=t("h1",null,"个人健康记录 · 就诊摘要",-1)),t("p",null,[t("strong",null,o(d.user.display_name),1),t("span",null,"生成时间："+o(f(N)),1)])]),e[19]||(e[19]=t("p",{class:"visit-report-notice"},"来源：本人手动填写的健康记录。本摘要用于说明个人经历，不是医疗机构出具的病历或诊断。未填写的数据不表示正常；状态反映最后一次保存的内容。",-1)),t("section",ot,[e[7]||(e[7]=t("h2",null,"记录范围",-1)),t("p",null,o(d.scope)+" · 共 "+o(s.value.count)+" 条，持续中 "+o(s.value.ongoingCount)+" 条，已结束 "+o(s.value.endedCount)+" 条。",1),s.value.firstDate?(l(),p("p",rt,"所选记录的开始日期："+o(s.value.firstDate)+" 至 "+o(s.value.lastDate)+"。",1)):g("",!0),t("div",it,[t("div",null,[e[5]||(e[5]=t("h3",null,"填写过的症状",-1)),t("p",null,o(s.value.symptoms.map(r=>`${r.name}（${r.count} 条）`).join("、")||"未填写症状标签"),1)]),t("div",null,[e[6]||(e[6]=t("h3",null,"填写过的用药",-1)),t("p",null,o(s.value.medications.map(r=>`${r.name}（${r.count} 条）`).join("、")||"未填写用药信息"),1)])]),e[8]||(e[8]=t("p",{class:"visit-report-muted"},"次数按包含该项的记录条数统计；用药内容为本人填写，不能据此判断疗效或调整用药。",-1))]),u.value.trim()?(l(),p("section",st,[e[9]||(e[9]=t("h2",null,"就诊时想问的问题",-1)),t("p",null,o(u.value.trim()),1)])):g("",!0),t("section",nt,[e[18]||(e[18]=t("h2",null,"病程明细 · 按开始日期排列",-1)),(l(!0),p(C,null,q(s.value.records,(r,L)=>(l(),p("article",{key:r.id,class:"visit-report-episode"},[t("h3",null,o(L+1)+". "+o(r.chief_complaint),1),t("dl",at,[t("div",null,[e[10]||(e[10]=t("dt",null,"开始 / 结束",-1)),t("dd",null,o(r.started_at)+" / "+o(r.ended_at||"尚未结束"),1)]),t("div",null,[e[11]||(e[11]=t("dt",null,"记录状态 / 变化",-1)),t("dd",null,o(r.status==="ongoing"?"持续中":"已结束")+" / "+o(f(B)[r.outcome]),1)]),t("div",null,[e[12]||(e[12]=t("dt",null,"症状标签",-1)),t("dd",null,o(r.symptoms.join("、")||"未填写"),1)]),t("div",null,[e[13]||(e[13]=t("dt",null,"主观不适程度",-1)),t("dd",null,o(r.severity)+" / 5 · "+o(f(H)[r.severity-1]),1)])]),t("p",lt,[e[14]||(e[14]=t("strong",null,"手动测量：",-1)),b("体温 "+o(x(r.vitals.temperature,"°C"))+"；心率 "+o(x(r.vitals.heart_rate,"次/分"))+"；血氧 "+o(x(r.vitals.spo2,"%"))+"。测量的具体时刻未记录。",1)]),t("div",pt,[e[16]||(e[16]=t("h4",null,"用药记录",-1)),r.medications.length?(l(),p("table",dt,[e[15]||(e[15]=t("thead",null,[t("tr",null,[t("th",{scope:"col"},"名称"),t("th",{scope:"col"},"每次用量"),t("th",{scope:"col"},"使用频率")])],-1)),t("tbody",null,[(l(!0),p(C,null,q(r.medications,(w,F)=>(l(),p("tr",{key:F},[t("td",null,o(w.name),1),t("td",null,o(w.dose||"未填写"),1),t("td",null,o(w.frequency||"未填写"),1)]))),128))])])):(l(),p("p",ut,"未填写用药信息。"))]),r.notes?(l(),p("div",mt,[e[17]||(e[17]=t("h4",null,"补充笔记",-1)),t("p",null,o(r.notes),1)])):g("",!0),t("p",vt,"最近保存："+o(new Date(r.updated_at).toLocaleString("zh-CN")),1)]))),128))]),e[20]||(e[20]=t("footer",{class:"visit-report-footer"},"此摘要仅包含本次选择的记录。健康记录以本人实际填写为准，请在就诊时补充最新情况。",-1))],512)]))}});export{ft as default};

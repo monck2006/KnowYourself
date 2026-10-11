@@ -1,0 +1,26 @@
+{
+  "notice": "仅记录官方竞赛下载原件的来源、SHA256与计数；不包含语料，不构成再分发授权或医学指南。",
+  "datasets": [
+    {
+      "id": "cmeie",
+      "name": "CMeIE 中文医学信息抽取",
+      "source_url": "https://naoqi-data.nanhubrain.cn/#/data-detail/2",
+      "sha256": "def00cab6e93a2a3475b0f354bb7626ceda51a92bbb31eb75f834539adae7b8c",
+      "sample_count": 22406,
+      "split_counts": {"train": 14339, "dev": 3585, "test": 4482},
+      "schema_count": 53,
+      "relation_count": 54286,
+      "entity_count": 72047
+    },
+    {
+      "id": "cmeee",
+      "name": "CMeEE-V2 中文医学实体识别",
+      "source_url": "https://naoqi-data.nanhubrain.cn/#/data-detail/1",
+      "sha256": "f99529d5356d2eb4cd760ff1a89f53249927b6715c2107e3ac193f3bc13dce86",
+      "sample_count": 23000,
+      "split_counts": {"train": 15000, "dev": 5000, "test": 3000},
+      "schema_count": 9,
+      "entity_count": 108730
+    }
+  ]
+}

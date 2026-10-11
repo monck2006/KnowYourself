@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "mimosa-hook-status/v1",
+  "recordedAt": "2026-10-11T08:03:52.197Z",
+  "sessionId": "sess_78884116-848c-4621-802e-96e7cce315fa",
+  "event": "PostToolUse",
+  "toolName": "Edit",
+  "file": "D:/Project/Project0930_健康疾病智能助手/KnowYourself/backend/tests/test_health_context.py",
+  "outcome": "inconclusive",
+  "coverage": "partial",
+  "findingCount": 0,
+  "durationMs": 11,
+  "hostState": "hook_complete",
+  "reportHint": ".mimosa/reports/"
+}

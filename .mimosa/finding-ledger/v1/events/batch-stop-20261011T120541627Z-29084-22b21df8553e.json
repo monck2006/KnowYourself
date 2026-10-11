@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20261011T120541627Z-29084-22b21df8553e",
+  "runId": "20261011T120541627Z-29084-22b21df8553e",
+  "runStatus": "inconclusive",
+  "coverage": {
+    "status": "partial",
+    "reasons": [
+      {
+        "code": "bash_discovery_incomplete",
+        "stage": "baseline-enumerate",
+        "target": "backend/.pytest_cache",
+        "detail": "EPERM: operation not permitted, scandir 'D:\\Project\\Project0930_健康疾病智能助手\\KnowYourself\\backend\\.pytest_cache'",
+        "affectsCompletion": true
+      },
+      {
+        "code": "baseline_partial",
+        "stage": "baseline",
+        "target": ".",
+        "detail": "baseline capture had enumeration or snapshot errors",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "baseline-enumerate",
+        "target": "backend/.pytest_cache",
+        "detail": "bash_discovery_incomplete: EPERM: operation not permitted, scandir 'D:\\Project\\Project0930_健康疾病智能助手\\KnowYourself\\backend\\.pytest_cache'",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "baseline",
+        "target": ".",
+        "detail": "baseline_partial: baseline capture had enumeration or snapshot errors",
+        "affectsCompletion": true
+      }
+    ]
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "d3f9e3ea578587b6e941643b8bc5aa8dc9f851cd",
+  "diffHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rulesVersion": "unavailable",
+  "sessionHash": "5732d7b160029c0dc9d28f0de3a28f74c413c254f81d2c3793de7331d2f468d1",
+  "reportRef": ".mimosa/reports/task-review-sess_48298d2d-4af2-48d7-a729-7937de397644-20261011T120541627Z-29084-22b21df8553e.json",
+  "events": [],
+  "observedFindingIds": [],
+  "verifiedFiles": [],
+  "recordedAt": "2026-10-11T12:05:42.038Z"
+}

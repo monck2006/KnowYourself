@@ -34,23 +34,23 @@
    ============================================================================= */
 :root {
   /* ---- Palette ---- */
-  --bg: #f7f8f4;
-  --bg-deep: #eef1e8;
+  --bg: #fafcfc;
+  --bg-deep: #e8eff4;
   --surface: #ffffff;
-  --surface-soft: #fbfcf8;
-  --surface-sunken: #f2f4ed;
+  --surface-soft: #f9fbfc;
+  --surface-sunken: #edf2f6;
 
-  --ink: #22302a;
-  --ink-soft: #46564d;
-  --muted: #6b7a71;
-  --faint: #94a29a;
+  --ink: #233b43;
+  --ink-soft: #435b6c;
+  --muted: #64798a;
+  --faint: #7b8d9b;
 
   /* Calm sage / green primary */
-  --primary: #4a7c5f;
-  --primary-strong: #3c6a50;
-  --primary-deep: #2f5640;
-  --primary-soft: #e6efe7;
-  --primary-tint: #f0f5ef;
+  --primary: #176f7a;
+  --primary-strong: #125b66;
+  --primary-deep: #104c58;
+  --primary-soft: #e2eff2;
+  --primary-tint: #f0f7f8;
   --primary-contrast: #ffffff;
 
   /* Warm amber accent */
@@ -70,15 +70,15 @@
   --emergency-soft: #f9e6e2;
   --attention: #b0761f;
   --attention-soft: #f9efdd;
-  --recorded: #4a7c5f;
-  --recorded-soft: #e8f0e9;
+  --recorded: #176f7a;
+  --recorded-soft: #e2eff2;
 
   /* Lines & focus */
-  --border: #e2e7dc;
-  --border-strong: #d2d9cb;
-  --border-faint: #edf0e8;
-  --focus: #6b9a7d;
-  --focus-ring: rgba(107, 154, 125, 0.35);
+  --border: #e3ebeb;
+  --border-strong: #c6d4df;
+  --border-faint: #edf2f6;
+  --focus: #198492;
+  --focus-ring: rgba(25, 132, 146, 0.28);
 
   /* ---- Spacing ---- */
   --space-1: 4px;
@@ -94,9 +94,9 @@
   /* ---- Radius ---- */
   --radius-xs: 7px;
   --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-pill: 999px;
 
   /* ---- Shadow ---- */
@@ -110,8 +110,7 @@
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC",
     "Helvetica Neue", Arial, sans-serif;
-  --font-display: Georgia, "Songti SC", "Noto Serif SC", "Source Han Serif SC",
-    "SimSun", "Times New Roman", serif;
+  --font-display: var(--font);
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
 
@@ -122,12 +121,12 @@
   --text-lg: 18px;
   --text-xl: 22px;
   --text-2xl: 27px;
-  --text-3xl: 34px;
+  --text-3xl: 28px;
 
   /* ---- Layout ---- */
-  --sidebar-w: 260px;
-  --topbar-h: 68px;
-  --content-max: 1200px;
+  --sidebar-w: 224px;
+  --topbar-h: 64px;
+  --content-max: 1440px;
 
   /* ---- Motion ---- */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -560,7 +559,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 2px rgba(24, 49, 72, 0.025);
 }
 
 .panel-heading {
@@ -1049,10 +1048,10 @@ input[type="search"]::-webkit-search-cancel-button {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-  padding: var(--space-7) var(--space-5);
+  padding: var(--space-6) var(--space-4);
   padding-top: calc(var(--space-7) + env(safe-area-inset-top));
   padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
-  background-color: var(--surface-soft);
+  background-color: var(--surface);
   border-right: 1px solid var(--border);
   overflow-y: auto;
   z-index: 30;
@@ -1104,6 +1103,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background-color: var(--primary-soft);
   color: var(--primary-deep);
   font-weight: 650;
+  box-shadow: inset 3px 0 var(--primary);
 }
 
 .main-nav button.active svg {
@@ -1224,7 +1224,7 @@ input[type="search"]::-webkit-search-cancel-button {
   min-height: var(--topbar-h);
   padding: var(--space-3) var(--space-7);
   padding-top: calc(var(--space-3) + env(safe-area-inset-top));
-  background-color: rgba(247, 248, 244, 0.86);
+  background-color: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   backdrop-filter: saturate(1.4) blur(12px);
   border-bottom: 1px solid var(--border);
@@ -1309,13 +1309,13 @@ input[type="search"]::-webkit-search-cancel-button {
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-5);
-  margin-bottom: var(--space-7);
+  margin-bottom: var(--space-6);
 }
 
 .page-heading h1 {
   font-family: var(--font-display);
   font-size: clamp(24px, 2.6vw, var(--text-3xl));
-  font-weight: 600;
+  font-weight: 650;
   letter-spacing: 0.005em;
   margin-bottom: var(--space-2);
 }
@@ -1323,6 +1323,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .page-heading p {
   color: var(--muted);
   max-width: 42rem;
+  font-size: 14px;
+  line-height: 1.8;
 }
 
 .page-heading .heading-decoration {
@@ -1902,6 +1904,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .search-field input {
+  min-width: 0;
   border: none;
   background: none;
   box-shadow: none;
@@ -2000,6 +2003,30 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: var(--text-xs);
   color: var(--faint);
   text-align: center;
+}
+
+.journal-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: var(--space-4);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.journal-filters .field { margin-bottom: 0; min-width: 0; }
+.journal-filters input, .journal-filters select { min-width: 0; width: 100%; }
+.journal-filter-actions { grid-column: 1 / -1; display: flex; gap: var(--space-4); align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+.journal-pagination, .journal-pagination nav { display: flex; gap: var(--space-3); align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.journal-export-note { margin-top: var(--space-4); }
+.account-form { display: grid; gap: var(--space-4); }
+.account-form > .button { justify-self: start; }
+.account-form .field { margin-bottom: 0; }
+.account-security-note { margin-bottom: var(--space-5); }
+
+@media (max-width: 600px) {
+  .journal-filters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-3); }
+  .journal-filters > .field:nth-child(3) { grid-column: 1 / -1; }
+  .journal-pagination { justify-content: center; }
 }
 
 /* =============================================================================
@@ -3071,6 +3098,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 
   .search-field {
+    flex: none;
     max-width: none;
     min-width: 0;
   }

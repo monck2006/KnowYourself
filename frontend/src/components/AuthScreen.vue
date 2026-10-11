@@ -4,6 +4,7 @@ import { api, connectionError } from '../api'
 import type { User } from '../types'
 import Icon from './Icon.vue'
 
+defineProps<{ initialError?: string }>()
 const emit = defineEmits<{ authenticated: [user: User] }>()
 const mode = ref<'login' | 'register'>('login')
 const username = ref('')
@@ -29,19 +30,20 @@ async function submit() {
     <section class="auth-story">
       <a href="#" class="brand"><span class="brand-mark"><Icon name="leaf" :size="27" /></span><span>知己<small>KnowYourself</small></span></a>
       <div class="auth-story-content">
-        <span class="eyebrow">A LITTLE MORE IN TUNE WITH YOU</span>
-        <h1>身体的每个信号，<br />都值得被听见。</h1>
-        <p>记下不舒服的时刻，也记下好转的日子。<br />让零散的感受，成为有迹可循的健康记录。</p>
-        <div class="auth-leaves" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
+        <span class="eyebrow">你的个人健康工作台</span>
+        <h1>了解这次不适，<br />也看见身体的变化。</h1>
+        <p>从症状梳理到病程回顾，把实际用药、设备测量与个人健康背景放在一起。</p>
+        <ul class="auth-service-list"><li><Icon name="pulse" :size="20" /><span><strong>有步骤地梳理症状</strong><small>补充关键信息，整理下一步与就诊准备</small></span></li><li><Icon name="book" :size="20" /><span><strong>连续记录病程和用药</strong><small>结合历史与真实测量，回顾身体变化</small></span></li><li><Icon name="shield" :size="20" /><span><strong>由你管理个人数据</strong><small>跨设备查看，可导出记录或删除账户</small></span></li></ul>
       </div>
       <div class="auth-story-footer"><Icon name="shield" :size="18" /> 为自己记录，由自己掌握</div>
     </section>
     <section class="auth-panel">
       <div class="auth-form-wrap">
-        <span class="eyebrow">YOUR HEALTH, YOUR STORY</span>
+        <span class="eyebrow">知己 · 个人健康管理</span>
         <h2>{{ mode === 'login' ? '欢迎回到知己' : '从认识自己开始' }}</h2>
         <p class="muted auth-intro">{{ mode === 'login' ? '登录账号，接着记录你的健康故事。' : '创建账号，在电脑和手机上查看同一份记录。' }}</p>
         <div v-if="connectionError" class="notice error" role="alert">{{ connectionError }}</div>
+        <div v-else-if="initialError" class="notice error" role="alert">{{ initialError }}</div>
         <form @submit.prevent="submit">
           <label class="field">用户名<input v-model="username" name="username" autocomplete="username" required minlength="3" maxlength="32" placeholder="输入用户名" :disabled="loading" /></label>
           <label v-if="mode === 'register'" class="field">怎么称呼你<input v-model="displayName" name="display_name" autocomplete="nickname" required maxlength="40" placeholder="你的称呼" :disabled="loading" /></label>
@@ -57,3 +59,12 @@ async function submit() {
     </section>
   </main>
 </template>
+
+<style scoped>
+.auth-story { background: #153e52; color: white; }
+.auth-story .brand, .auth-story .brand small { color: white; }.auth-story .brand small { opacity: .7; }
+.auth-story-content h1 { font-family: var(--font); font-size: clamp(32px, 3vw, 44px); font-weight: 650; line-height: 1.45; letter-spacing: 0; color: white; }.auth-story-content > p { color: #c9dce5; max-width: 430px; line-height: 1.9; }.auth-story-content > .eyebrow { color: #a6cdd6; }
+.auth-service-list { list-style: none; display: grid; gap: 24px; padding: 0; margin-top: 40px; }.auth-service-list li { display: flex; align-items: flex-start; gap: 14px; }.auth-service-list svg { color: #9ac8d1; flex-shrink: 0; margin-top: 3px; }.auth-service-list span { display: grid; gap: 7px; }.auth-service-list strong { font-size: 14px; font-weight: 550; }.auth-service-list small { font-size: 12px; color: #a9c4d0; line-height: 1.8; }.auth-story-footer { color: #b4cdd6; }
+.auth-panel { background: var(--surface); }.auth-form-wrap h2 { font-family: var(--font); font-weight: 650; }.auth-note { border-radius: 8px; }
+@media (max-width: 900px) { .auth-story { min-height: auto; padding: 24px; }.auth-story-content, .auth-story-footer { display: none; }.auth-panel { padding-top: 32px; } }
+</style>

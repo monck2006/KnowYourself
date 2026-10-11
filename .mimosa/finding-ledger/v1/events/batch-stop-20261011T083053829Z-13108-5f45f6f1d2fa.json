@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20261011T083053829Z-13108-5f45f6f1d2fa",
+  "runId": "20261011T083053829Z-13108-5f45f6f1d2fa",
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": [
+      {
+        "code": "baseline_partial",
+        "stage": "baseline",
+        "target": ".",
+        "detail": "baseline capture had enumeration or snapshot errors",
+        "affectsCompletion": false
+      }
+    ]
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "d3f9e3ea578587b6e941643b8bc5aa8dc9f851cd",
+  "diffHash": "3edae1143b272675313efc2e156666b0b9b229b9d37cc88f089aa86de9620895",
+  "rulesVersion": "unavailable",
+  "sessionHash": "43bfcb6da117973819a657dc081fbf408b6a8b3925faf050ed9cefee9fdd1d85",
+  "reportRef": ".mimosa/reports/task-review-sess_78884116-848c-4621-802e-96e7cce315fa-20261011T083053829Z-13108-5f45f6f1d2fa.json",
+  "events": [],
+  "observedFindingIds": [
+    "mimosa-43f4ddbbeaa133e0292dd31f",
+    "mimosa-98eb2af92654b75c5cdbc058",
+    "mimosa-ab397ff3a836745f5805850a",
+    "mimosa-b7bbe91977475f7ad4543f90"
+  ],
+  "verifiedFiles": [
+    {
+      "file": "backend/app/schemas.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "backend/app/health_context.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "backend/app/assessment.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/src/types.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/src/healthLabels.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/src/lib/healthDevice.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/native-plugins/health-device/android/src/main/java/com/zhiji/healthdevice/ZhijiHealthPlugin.kt",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-10-11T08:30:54.264Z"
+}

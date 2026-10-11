@@ -1,4 +1,5 @@
 from copy import deepcopy
+from datetime import datetime, timezone
 
 from app.services import analyze_episode, build_patterns
 
@@ -18,7 +19,7 @@ def history():
 
 
 def test_similarity_never_means_safe_or_drug_effective():
-    result = analyze_episode(episode(medications=[{"name": "某药"}]), history())
+    result = analyze_episode(episode(medications=[{"name": "某药"}]), history(), now=datetime(2026, 8, 1, tzinfo=timezone.utc))
     assert result["matched_count"] == 3
     assert result["level"] == "recorded"
     assert "不能证明本次安全" in "".join(result["reasons"])

@@ -1,0 +1,31 @@
+"""Synthetic acceptance data, in a separate temporary database only."""
+import os
+from pathlib import Path
+from datetime import datetime, timedelta, timezone
+from fastapi.testclient import TestClient
+from app.main import create_app
+
+path = Path(os.environ['TEMP']) / 'zhiji-core-qa' / 'zhiji.sqlite3'
+headers = {'X-Zhiji-Client': '1'}
+now = datetime.now(timezone.utc)
+today = now.astimezone(timezone(timedelta(hours=8))).date()
+password = 'Synthetic-core-QA-2026'
+application = create_app(database_path=path)
+with TestClient(application) as c:
+    for index in range(5):
+        name = 'coreqa' if index == 0 else f'coreqa{index}'
+        response = c.post('/api/v1/auth/register', headers=headers, json={'username': name, 'password': password, 'display_name': '功能验收示例' if index == 0 else f'区域验收{index}', 'consent': True})
+        if response.status_code == 409:
+            c.post('/api/v1/auth/login', headers=headers, json={'username': name, 'password': password})
+        profile = c.get('/api/v1/health/profile').json()
+        c.put('/api/v1/health/profile', headers=headers, json={'version': profile['version'], 'birth_year': 1990, 'chronic_conditions': ['高血压（验收示例）'] if index == 0 else [], 'family_history': ['父亲：2型糖尿病（验收示例）'] if index == 0 else [], 'region': {'province': '测试省', 'city': '测试市', 'district': '测试区'}, 'regional_consent': True})
+        if c.get('/api/v1/episodes').json():
+            continue
+        if index == 0:
+            for days, duration in [(20, 3), (40, 2)]:
+                start = today - timedelta(days=days)
+                c.post('/api/v1/episodes', headers=headers, json={'chief_complaint': '既往咳嗽咽痛（验收示例）', 'symptoms': ['咳嗽', '咽痛'], 'severity': 2, 'started_at': start.isoformat(), 'ended_at': (start+timedelta(days=duration-1)).isoformat(), 'status': 'ended', 'outcome': 'resolved'})
+            items = [{'source': 'manual', 'source_id': f'qa-{days}', 'metric': 'heart_rate', 'value': value, 'unit': 'bpm', 'measured_at': (now-timedelta(days=days)).isoformat(), 'context': 'resting', 'device_name': '验收用手动测量'} for days, value in [(5, 60), (6, 62), (7, 64), (0, 82)]]
+            c.post('/api/v1/health/observations/import', headers=headers, json={'items': items})
+        c.post('/api/v1/episodes', headers=headers, json={'chief_complaint': '咳嗽、咽痛第3天（功能验收示例）', 'symptoms': ['咳嗽', '咽痛'], 'severity': 2, 'started_at': (today-timedelta(days=2)).isoformat(), 'disease_category': 'infectious', 'diagnosis_name': '呼吸道症状（自述，验收数据）', 'diagnosis_source': 'self_report', 'infection_group': 'respiratory', 'vitals': {'temperature': 38.1}, 'medications': [{'name': '验收示例药品', 'started_at': (today-timedelta(days=1)).isoformat(), 'adherence': 'as_recorded', 'response': 'unchanged', 'dose': '按已记录医嘱', 'frequency': '已记录'}], 'notes': '全部为独立临时数据库中的功能验收数据，不是真实病人资料。'})
+print('Synthetic QA records ready; personal database untouched.')

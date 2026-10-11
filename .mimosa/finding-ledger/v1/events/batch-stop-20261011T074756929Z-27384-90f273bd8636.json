@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20261011T074756929Z-27384-90f273bd8636",
+  "runId": "20261011T074756929Z-27384-90f273bd8636",
+  "runStatus": "inconclusive",
+  "coverage": {
+    "status": "partial",
+    "reasons": [
+      {
+        "code": "bash_discovery_incomplete",
+        "stage": "baseline-enumerate",
+        "target": "backend/.pytest_cache",
+        "detail": "EPERM: operation not permitted, scandir 'D:\\Project\\Project0930_健康疾病智能助手\\KnowYourself\\backend\\.pytest_cache'",
+        "affectsCompletion": true
+      },
+      {
+        "code": "changed_file_unreadable",
+        "stage": "candidate-select",
+        "target": ".tools/stub-llm.py",
+        "detail": "observed changed file no longer exists or cannot be read",
+        "affectsCompletion": true
+      },
+      {
+        "code": "baseline_partial",
+        "stage": "baseline",
+        "target": ".",
+        "detail": "baseline capture had enumeration or snapshot errors",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "baseline-enumerate",
+        "target": "backend/.pytest_cache",
+        "detail": "bash_discovery_incomplete: EPERM: operation not permitted, scandir 'D:\\Project\\Project0930_健康疾病智能助手\\KnowYourself\\backend\\.pytest_cache'",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "candidate-select",
+        "target": ".tools/stub-llm.py",
+        "detail": "changed_file_unreadable: observed changed file no longer exists or cannot be read",
+        "affectsCompletion": true
+      },
+      {
+        "code": "project_check_failed",
+        "stage": "baseline",
+        "target": ".",
+        "detail": "baseline_partial: baseline capture had enumeration or snapshot errors",
+        "affectsCompletion": true
+      }
+    ]
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "d3f9e3ea578587b6e941643b8bc5aa8dc9f851cd",
+  "diffHash": "e1d901d03a876832bbdf75d3860f72e5d0641ad87fe52266846fc78ca576134f",
+  "rulesVersion": "unavailable",
+  "sessionHash": "43bfcb6da117973819a657dc081fbf408b6a8b3925faf050ed9cefee9fdd1d85",
+  "reportRef": ".mimosa/reports/task-review-sess_78884116-848c-4621-802e-96e7cce315fa-20261011T074756929Z-27384-90f273bd8636.json",
+  "events": [],
+  "observedFindingIds": [
+    "mimosa-43f4ddbbeaa133e0292dd31f",
+    "mimosa-98eb2af92654b75c5cdbc058",
+    "mimosa-ab397ff3a836745f5805850a",
+    "mimosa-b7bbe91977475f7ad4543f90"
+  ],
+  "verifiedFiles": [
+    {
+      "file": "backend/app/schemas.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "backend/app/health_context.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "backend/app/assessment.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/src/types.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/src/healthLabels.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/src/lib/healthDevice.ts",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "frontend/native-plugins/health-device/android/src/main/java/com/zhiji/healthdevice/ZhijiHealthPlugin.kt",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-10-11T07:47:57.342Z"
+}

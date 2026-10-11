@@ -3,18 +3,13 @@ import { computed, reactive, ref, watch } from 'vue'
 import { ApiError, api } from '../api'
 import { today, severityLabels } from '../format'
 import type { Episode, EpisodeInput } from '../types'
+import { medicationInput, toEpisodeInput } from '../episodeInput'
 import Icon from './Icon.vue'
 
 const props = defineProps<{ episode?: Episode }>()
 const emit = defineEmits<{ saved: [episode: Episode]; dirty: []; busy: [value: boolean] }>()
 const initial = props.episode
-const form = reactive<EpisodeInput>({
-  chief_complaint: initial?.chief_complaint ?? '', symptoms: [...(initial?.symptoms ?? [])],
-  severity: initial?.severity ?? 2, started_at: initial?.started_at ?? today(), ended_at: initial?.ended_at ?? null,
-  status: initial?.status ?? 'ongoing', outcome: initial?.outcome ?? 'ongoing',
-  vitals: { temperature: initial?.vitals.temperature ?? null, heart_rate: initial?.vitals.heart_rate ?? null, spo2: initial?.vitals.spo2 ?? null },
-  medications: initial?.medications.map(m => ({ ...m })) ?? [], notes: initial?.notes ?? '',
-})
+const form = reactive<EpisodeInput>(toEpisodeInput(initial))
 const version = ref(initial?.version)
 const loading = ref(false)
 const error = ref('')
@@ -39,16 +34,13 @@ function addSymptom() {
   if (!form.symptoms.includes(value)) toggleSymptom(value)
   customSymptom.value = ''
 }
-function numberOrNull(value: unknown) { return value === '' || value === null ? null : Number(value) }
 async function save() {
   if (loading.value || conflict.value) return
   if (form.ended_at && form.ended_at < form.started_at) { error.value = '结束日期不能早于开始日期。'; return }
-  const input: EpisodeInput = {
-    ...form, chief_complaint: form.chief_complaint.trim(), symptoms: [...form.symptoms],
-    ended_at: form.status === 'ongoing' ? null : form.ended_at,
-    vitals: { temperature: numberOrNull(form.vitals.temperature), heart_rate: numberOrNull(form.vitals.heart_rate), spo2: numberOrNull(form.vitals.spo2) },
-    medications: form.medications.map(m => ({ name: m.name.trim(), dose: m.dose.trim(), frequency: m.frequency.trim() })),
-  }
+  if (form.medications.some(m => m.started_at && m.ended_at && m.ended_at < m.started_at)) { error.value = '用药结束日期不能早于开始日期。'; return }
+  if (form.medications.some(m => m.ended_at && !m.started_at)) { error.value = '填写用药结束日期时，请同时填写开始日期。'; return }
+  if (form.diagnosis_source !== 'unknown' && !form.diagnosis_name?.trim()) { error.value = '请选择名称来源对应的诊断或自述名称。'; return }
+  const input = toEpisodeInput(form)
   loading.value = true; emit('busy', true); error.value = ''
   try {
     const saved = initial ? await api.update(initial.id, input, version.value!) : await api.create(input)
@@ -63,7 +55,7 @@ async function reload() {
   loading.value = true; emit('busy', true)
   try {
     const latest = await api.episode(initial.id)
-    Object.assign(form, latest, { symptoms: [...latest.symptoms], medications: latest.medications.map(m => ({ ...m })), vitals: { ...latest.vitals } })
+    Object.assign(form, toEpisodeInput(latest))
     version.value = latest.version; conflict.value = false; error.value = ''
   } catch (e) { error.value = e instanceof Error ? e.message : '载入失败，请重试。' }
   finally { loading.value = false; emit('busy', false) }
@@ -79,13 +71,28 @@ async function reload() {
       <div class="inline-field"><input v-model="customSymptom" maxlength="50" aria-label="自定义症状" placeholder="其他症状，自己添加" @keydown.enter.prevent="addSymptom" /><button class="button secondary small" type="button" :disabled="!customSymptom.trim()" @click="addSymptom"><Icon name="plus" :size="15" />添加</button></div>
       <div class="field severity-field"><span id="severity-label">不适程度 <span class="field-hint">主观感受，不代表医学分级</span></span><div class="severity-options" role="group" aria-labelledby="severity-label"><button v-for="(label, index) in severityLabels" :key="label" type="button" :class="{ selected: form.severity === index + 1 }" :aria-pressed="form.severity === index + 1" @click="form.severity = index + 1"><span>{{ index + 1 }}</span>{{ label }}</button></div></div>
       <div class="form-grid"><label class="field">开始日期 <span class="required">*</span><input v-model="form.started_at" type="date" :max="today()" required /></label><label class="field">记录状态<select v-model="form.status"><option value="ongoing">仍在持续</option><option value="ended">已经结束</option></select></label><label v-if="form.status === 'ended'" class="field">结束日期 <span class="required">*</span><input v-model="form.ended_at" type="date" :min="form.started_at" :max="today()" required /></label><label class="field">目前变化<select v-model="form.outcome"><option value="ongoing">仍在观察</option><option value="improving">有所好转</option><option value="resolved">症状已消失</option><option value="worsened">有所加重</option></select></label></div>
+      <div class="form-grid"><label class="field">病程类别<select v-model="form.disease_category"><option value="unknown">尚未明确</option><option value="infectious">感染性疾病</option><option value="hereditary">遗传相关疾病</option><option value="other">其他疾病</option></select></label><label v-if="form.disease_category === 'infectious'" class="field">感染相关类型<select v-model="form.infection_group"><option value="unspecified">尚未明确</option><option value="respiratory">呼吸道</option><option value="gastrointestinal">胃肠道</option></select></label><label class="field">已知诊断或自述名称<input v-model="form.diagnosis_name" maxlength="100" placeholder="不确定可留空" /></label><label class="field">名称来源<select v-model="form.diagnosis_source"><option value="unknown">尚未明确</option><option value="self_report">本人自述</option><option value="clinician">医生诊断</option></select></label></div>
       <div class="form-divider"></div>
       <div class="form-section"><div class="section-number">02</div><div><h3>补充一些细节 <span class="field-hint">选填</span></h3><p>填入实际测量的数据，没有测量可以留空。</p></div></div>
       <div class="form-grid vitals-grid"><label class="field">体温 <span class="field-hint">°C</span><input v-model="form.vitals.temperature" type="number" inputmode="decimal" min="30" max="45" step="0.1" placeholder="未填写" /></label><label class="field">心率 <span class="field-hint">次 / 分</span><input v-model="form.vitals.heart_rate" type="number" inputmode="numeric" min="20" max="250" step="1" placeholder="未填写" /></label><label class="field">血氧 <span class="field-hint">%</span><input v-model="form.vitals.spo2" type="number" inputmode="numeric" min="50" max="100" step="1" placeholder="未填写" /></label></div>
-      <div class="field"><span>用药记录 <span class="field-hint">仅记录实际用药，不提供用药建议</span></span><div v-for="(medication, index) in form.medications" :key="index" class="medication-row"><label><span class="sr-only">药品名称 {{ index + 1 }}</span><input v-model="medication.name" required maxlength="100" placeholder="药品名称" /></label><label><span class="sr-only">用量 {{ index + 1 }}</span><input v-model="medication.dose" maxlength="100" placeholder="每次用量" /></label><label><span class="sr-only">频率 {{ index + 1 }}</span><input v-model="medication.frequency" maxlength="100" placeholder="使用频率" /></label><button class="icon-button" type="button" :aria-label="`移除第 ${index + 1} 条用药记录`" @click="form.medications.splice(index, 1)"><Icon name="close" :size="16" /></button></div><button v-if="form.medications.length < 20" class="add-medication" type="button" @click="form.medications.push({ name: '', dose: '', frequency: '' })"><Icon name="plus" :size="16" />添加用药</button></div>
+      <div class="field"><span>实际用药与变化 <span class="field-hint">记录自报反应，供后续回顾</span></span>
+        <div v-for="(medication, index) in form.medications" :key="index" class="medication-card">
+          <div class="medication-row"><label><span class="sr-only">药品名称 {{ index + 1 }}</span><input v-model="medication.name" required maxlength="100" placeholder="药品名称" /></label><label><span class="sr-only">用量 {{ index + 1 }}</span><input v-model="medication.dose" maxlength="100" placeholder="每次用量" /></label><label><span class="sr-only">频率 {{ index + 1 }}</span><input v-model="medication.frequency" maxlength="100" placeholder="使用频率" /></label><button class="icon-button" type="button" :aria-label="`移除第 ${index + 1} 条用药记录`" @click="form.medications.splice(index, 1)"><Icon name="close" :size="16" /></button></div>
+          <div class="form-grid"><label class="field">用药开始<input v-model="medication.started_at" type="date" :max="today()" /></label><label class="field">用药结束<input v-model="medication.ended_at" type="date" :min="medication.started_at || undefined" :max="today()" /></label><label class="field">实际执行<select v-model="medication.adherence"><option value="unknown">未记录</option><option value="as_recorded">按所记用量与频率</option><option value="missed">有漏服或漏用</option></select></label><label class="field">自述变化<select v-model="medication.response"><option value="unknown">尚不清楚</option><option value="improving">有所好转</option><option value="unchanged">无明显变化</option><option value="worsened">有所加重</option></select></label></div>
+          <label class="field">用药补充<input v-model="medication.notes" maxlength="300" placeholder="如：漏用时间、变化经过或不适" /></label>
+        </div>
+        <button v-if="form.medications.length < 20" class="add-medication" type="button" @click="form.medications.push(medicationInput())"><Icon name="plus" :size="16" />添加用药</button>
+      </div>
       <label class="field">其他想记下的事<textarea v-model="form.notes" rows="3" maxlength="3000" placeholder="例如：当天饮食、作息、就诊经过，或医生的嘱咐"></textarea><span class="character-count">{{ form.notes.length }} / 3000</span></label>
     </fieldset>
     <div v-if="error" class="notice error" role="alert">{{ error }}<button v-if="conflict" type="button" class="text-button" :disabled="loading" @click="reload">重新载入最新记录</button></div>
     <div class="form-footer"><p><Icon name="shield" :size="15" /> 保存后仅你登录的账号可见</p><button class="button primary" :disabled="loading || conflict"><Icon name="check" :size="18" />{{ loading ? '正在保存…' : initial ? '保存修改' : '保存这次记录' }}</button></div>
   </form>
 </template>
+
+<style scoped>
+.medication-card { border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); margin-top: 10px; background: var(--surface-soft); }
+.medication-card .medication-row { margin-top: 0; }
+.medication-card .form-grid { margin-top: 12px; }
+.medication-card > .field:last-child { margin-bottom: 0; }
+</style>

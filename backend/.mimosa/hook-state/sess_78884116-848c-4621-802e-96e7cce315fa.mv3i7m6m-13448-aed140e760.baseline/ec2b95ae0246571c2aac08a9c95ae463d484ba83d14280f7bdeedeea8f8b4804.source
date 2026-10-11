@@ -1,0 +1,136 @@
+"""Server-canonical sanitization for the conversation-guided episode intake.
+
+The model only *proposes* field values. Every value is re-validated here against
+the same bounds the strict ``EpisodeInput`` schema enforces, and any field that
+does not sanitize cleanly is dropped. Completion and the missing-field checklist
+are decided here, never by the model, so triage and record shape stay server-side.
+"""
+
+from datetime import date, datetime, timedelta, timezone
+import re
+
+BEIJING = timezone(timedelta(hours=8))
+DATE = re.compile(r"\d{4}-\d{2}-\d{2}", flags=re.ASCII)
+
+# Fields the guide actively tries to collect, in priority order.
+ASK_ORDER = ("chief_complaint", "symptoms", "started_at", "severity")
+# A draft may only be submitted as an episode once these are present.
+CORE = ("chief_complaint", "symptoms")
+ENUMS = {
+    "status": {"ongoing", "ended"},
+    "outcome": {"ongoing", "improving", "resolved", "worsened"},
+    "disease_category": {"unknown", "infectious", "hereditary", "other"},
+    "diagnosis_source": {"unknown", "self_report", "clinician"},
+    "infection_group": {"unspecified", "respiratory", "gastrointestinal"},
+}
+DEFAULTS = {"status": "ongoing", "outcome": "ongoing", "disease_category": "unknown",
+            "diagnosis_source": "unknown", "infection_group": "unspecified"}
+VITAL_LIMITS = {"temperature": (30.0, 45.0), "heart_rate": (20, 250), "spo2": (50, 100)}
+
+
+def _text(value, limit: int) -> str:
+    return value.strip()[:limit] if isinstance(value, str) else ""
+
+
+def _date(value) -> str:
+    if isinstance(value, str) and DATE.fullmatch(value.strip()):
+        value = value.strip()
+        try:
+            parsed = date.fromisoformat(value)
+        except ValueError:
+            return ""
+        if parsed <= datetime.now(BEIJING).date():
+            return value
+    return ""
+
+
+def _vitals(value) -> dict:
+    if not isinstance(value, dict):
+        return {}
+    clean = {}
+    for key, (low, high) in VITAL_LIMITS.items():
+        item = value.get(key)
+        if isinstance(item, bool) or not isinstance(item, (int, float)):
+            continue
+        if low <= item <= high:
+            clean[key] = int(item) if key in {"heart_rate", "spo2"} else round(float(item), 2)
+    return clean
+
+
+def sanitize(draft) -> dict:
+    """Return only values that satisfy the strict schema; drop everything else."""
+    if not isinstance(draft, dict):
+        draft = {}
+    symptoms = draft.get("symptoms")
+    clean_symptoms = []
+    if isinstance(symptoms, list):
+        for item in symptoms:
+            name = _text(item, 40)
+            if name and name not in clean_symptoms:
+                clean_symptoms.append(name)
+    severity = draft.get("severity")
+    if isinstance(severity, bool) or not isinstance(severity, int) or not 1 <= severity <= 5:
+        severity = None
+    result = {
+        "chief_complaint": _text(draft.get("chief_complaint"), 200),
+        "symptoms": clean_symptoms[:20],
+        "severity": severity,
+        "started_at": _date(draft.get("started_at")),
+        "ended_at": _date(draft.get("ended_at")),
+        "notes": _text(draft.get("notes"), 3000),
+        "diagnosis_name": _text(draft.get("diagnosis_name"), 100),
+        "vitals": _vitals(draft.get("vitals")),
+    }
+    for key, allowed in ENUMS.items():
+        value = draft.get(key)
+        result[key] = value if value in allowed else DEFAULTS[key]
+    # An ended episode needs a valid end date not before the start.
+    if result["status"] != "ended":
+        result["ended_at"] = ""
+    elif not result["started_at"] or not result["ended_at"] or result["ended_at"] < result["started_at"]:
+        result["ended_at"] = ""
+    # Infection grouping only applies to a suspected infectious record.
+    if result["disease_category"] != "infectious":
+        result["infection_group"] = "unspecified"
+    # A named diagnosis without a stated source stays unidentified.
+    if not result["diagnosis_name"]:
+        result["diagnosis_source"] = "unknown"
+    return result
+
+
+def merge(draft, fields) -> dict:
+    """Overlay model-proposed fields onto the draft, ignoring empty proposals."""
+    merged = dict(draft) if isinstance(draft, dict) else {}
+    if isinstance(fields, dict):
+        for key, value in fields.items():
+            meaningful = (value not in (None, "", [], {}) if not isinstance(value, dict)
+                          else any(_vitals(value).values()))
+            if meaningful:
+                merged[key] = value
+    return sanitize(merged)
+
+
+def _filled(clean: dict, key: str) -> bool:
+    value = clean.get(key)
+    return bool(value) if key != "severity" else value is not None
+
+
+def missing_fields(clean: dict) -> list[str]:
+    return [key for key in ASK_ORDER if not _filled(clean, key)]
+
+
+def is_complete(clean: dict) -> bool:
+    return all(_filled(clean, key) for key in CORE)
+
+
+def build_episode_input(clean: dict) -> dict:
+    """Expand a complete draft into a full ``EpisodeInput`` payload."""
+    return {
+        **clean,
+        "started_at": clean["started_at"] or datetime.now(BEIJING).date().isoformat(),
+        "severity": clean["severity"] if clean["severity"] is not None else 2,
+        "symptoms": list(clean["symptoms"]),
+        "ended_at": clean["ended_at"] or None,
+        "observation_ids": [],
+        "assessment_answers": [],
+    }

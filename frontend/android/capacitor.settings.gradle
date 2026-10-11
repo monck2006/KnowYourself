@@ -7,3 +7,6 @@ project(':capacitor-filesystem').projectDir = new File('../node_modules/.pnpm/@c
 
 include ':capacitor-share'
 project(':capacitor-share').projectDir = new File('../node_modules/.pnpm/@capacitor+share@8.0.2_@capacitor+core@8.5.2/node_modules/@capacitor/share/android')
+
+include ':zhiji-health-device'
+project(':zhiji-health-device').projectDir = new File('../node_modules/.pnpm/@zhiji+health-device@file+n_4f708471132f488faeeca4181940bf35/node_modules/@zhiji/health-device/android')

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "mimosa-finding-history/v1",
+  "runId": "20261011T120541627Z-29084-22b21df8553e",
+  "runStatus": "inconclusive",
+  "errors": [
+    "baseline-enumerate:backend/.pytest_cache: bash_discovery_incomplete: EPERM: operation not permitted, scandir 'D:\\Project\\Project0930_健康疾病智能助手\\KnowYourself\\backend\\.pytest_cache'",
+    "baseline:.: baseline_partial: baseline capture had enumeration or snapshot errors"
+  ],
+  "target": ".",
+  "revision": "d3f9e3ea578587b6e941643b8bc5aa8dc9f851cd",
+  "diffHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rulesVersion": "unavailable",
+  "recordedAt": "2026-10-11T12:05:41.627Z",
+  "timing": {
+    "startedAt": "2026-10-11T12:05:41.029Z",
+    "completedAt": "2026-10-11T12:05:41.627Z",
+    "durationMs": 598
+  },
+  "tokens": {
+    "input": 0,
+    "output": 0,
+    "total": 0,
+    "modelCalls": 0,
+    "measurement": "known-zero"
+  },
+  "findings": {
+    "total": 0,
+    "bySeverity": {},
+    "byStatus": {}
+  },
+  "coverage": {
+    "status": "partial",
+    "reasonCounts": {
+      "bash_discovery_incomplete": 1,
+      "baseline_partial": 1,
+      "project_check_failed": 2
+    }
+  },
+  "evidenceBoundary": "static_only",
+  "immutableReport": ".mimosa/reports/task-review-sess_48298d2d-4af2-48d7-a729-7937de397644-20261011T120541627Z-29084-22b21df8553e.json"
+}

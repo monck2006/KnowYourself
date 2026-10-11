@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "mimosa-finding-history/v1",
+  "runId": "20261011T074756929Z-27384-90f273bd8636",
+  "runStatus": "inconclusive",
+  "errors": [
+    "baseline-enumerate:backend/.pytest_cache: bash_discovery_incomplete: EPERM: operation not permitted, scandir 'D:\\Project\\Project0930_健康疾病智能助手\\KnowYourself\\backend\\.pytest_cache'",
+    "candidate-select:.tools/stub-llm.py: changed_file_unreadable: observed changed file no longer exists or cannot be read",
+    "baseline:.: baseline_partial: baseline capture had enumeration or snapshot errors"
+  ],
+  "target": ".",
+  "revision": "d3f9e3ea578587b6e941643b8bc5aa8dc9f851cd",
+  "diffHash": "e1d901d03a876832bbdf75d3860f72e5d0641ad87fe52266846fc78ca576134f",
+  "rulesVersion": "unavailable",
+  "recordedAt": "2026-10-11T07:47:56.929Z",
+  "timing": {
+    "startedAt": "2026-10-11T07:47:55.478Z",
+    "completedAt": "2026-10-11T07:47:56.929Z",
+    "durationMs": 1451
+  },
+  "tokens": {
+    "input": 0,
+    "output": 0,
+    "total": 0,
+    "modelCalls": 0,
+    "measurement": "known-zero"
+  },
+  "findings": {
+    "total": 0,
+    "bySeverity": {},
+    "byStatus": {}
+  },
+  "coverage": {
+    "status": "partial",
+    "reasonCounts": {
+      "bash_discovery_incomplete": 1,
+      "changed_file_unreadable": 1,
+      "baseline_partial": 1,
+      "project_check_failed": 3
+    }
+  },
+  "evidenceBoundary": "static_only",
+  "immutableReport": ".mimosa/reports/task-review-sess_78884116-848c-4621-802e-96e7cce315fa-20261011T074756929Z-27384-90f273bd8636.json"
+}

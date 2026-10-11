@@ -17,6 +17,9 @@ importers:
       '@capacitor/share':
         specifier: ^8.0.0
         version: 8.0.2(@capacitor/core@8.5.2)
+      '@zhiji/health-device':
+        specifier: file:./native-plugins/health-device
+        version: file:native-plugins/health-device(@capacitor/core@8.5.2)
       vue:
         specifier: ^3.5.0
         version: 3.5.43(typescript@5.9.3)
@@ -505,6 +508,11 @@ packages:
   '@xmldom/xmldom@0.9.12':
     resolution: {integrity: sha512-5AXjrcMClTryPe9LgZrygpB1lj7s0S9E0+W+AHaVKAVyHanafK86iPSvG5xHVSp/jC+VH1UXu0TAEmY279xH7A==}
     engines: {node: '>=14.6'}
+
+  '@zhiji/health-device@file:native-plugins/health-device':
+    resolution: {directory: native-plugins/health-device, type: directory}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   alien-signals@3.2.1:
     resolution: {integrity: sha512-I8FjmltrfnDFoZedi5CG8DghVYNhzb/Ijluz7tCSJH0xpd0484Kowhbb1XDYOxfJpU1p5wnM2X54dA+IfGyD1g==}
@@ -1355,6 +1363,10 @@ snapshots:
   '@vue/shared@3.5.43': {}
 
   '@xmldom/xmldom@0.9.12': {}
+
+  '@zhiji/health-device@file:native-plugins/health-device(@capacitor/core@8.5.2)':
+    dependencies:
+      '@capacitor/core': 8.5.2
 
   alien-signals@3.2.1: {}
 
